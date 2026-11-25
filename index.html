@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f8f1f6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="שגרת טיפוח">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>שגרת טיפוח</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f1f6;--card:#fff;--ink:#3b3340;--mu:#6f6778;--ln:#f0e4ee;--pk:#d93a86;--lil:#f3d9fb;--gr:radial-gradient(circle at 12% 92%,#ff9a7a 0,transparent 55%),radial-gradient(circle at 92% 12%,#d18cf0 0,transparent 60%),linear-gradient(135deg,#f6469a,#e66fc4);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1822;--card:#2a2331;--ink:#f3eaf5;--mu:#9d93a6;--ln:#3b3243;--pk:#f46aa8;--lil:#4a3358;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1e1822;--card:#2a2331;--ink:#f3eaf5;--mu:#9d93a6;--ln:#3b3243;--pk:#f46aa8;--lil:#4a3358;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:300 16px/1.5 Heebo,system-ui,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--pk);outline-offset:2px}
+h3{font-size:18px;font-weight:400;margin:0}
+.app{max-width:460px;margin:0 auto;padding:22px 18px 48px}
+.tabs{display:flex;gap:8px}
+.tabs button{flex:1;border:1px solid var(--pk);color:var(--pk);border-radius:99px;padding:9px 0;font-size:14px}
+.tabs .pb{flex:none;width:44px;padding:0;border:0;background:var(--gr)}
+summary{color:var(--pk);font-size:14px;cursor:pointer;margin:2px 0 10px}
+textarea{width:100%;font:inherit;font-size:16px;background:var(--bg);color:var(--ink);border:1px solid var(--ln);border-radius:14px;padding:11px 14px;margin:8px 0}
+.lg{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--mu)}
+.sws{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.sw{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--mu);width:56px}
+.sw i{width:40px;height:40px;border-radius:50%;display:block;border:2px solid transparent}
+.sw.on i{border-color:var(--ink)}
+#tt{position:fixed;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;z-index:40;pointer-events:none}
+#tt div{pointer-events:auto;background:var(--ink);color:var(--bg);border-radius:99px;padding:10px 18px;font-size:14px;display:flex;gap:14px;align-items:center}
+#tt button{color:var(--lil);font-weight:500}
+.pn{max-height:90vh;overflow:auto}
+.chs.seg{flex-wrap:nowrap;overflow-x:auto;margin-bottom:14px}
+.seg .ch{flex:none;padding:8px 16px;font-size:14px}
+.hd{display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--mu);margin-bottom:4px}
+.pb{width:34px;height:34px;border-radius:50%;background:var(--gr);flex:none}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--card);border-top:1px solid var(--ln);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));gap:6px}
+.tabs button{border:0;color:var(--mu);border-radius:14px;padding:11px 0;font-size:13px}
+.tabs button.on{background:var(--lil);color:var(--pk)}
+.app{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+#tt{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.cs{border:2px solid var(--ln);border-radius:14px;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;color:var(--mu);font-size:13px}
+.cs.on{border-color:var(--pk)}
+.cs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cs small{position:absolute;bottom:6px;background:var(--card);color:var(--ink);padding:1px 8px;border-radius:99px;font-size:11px}
+.tabs button.on{background:var(--lil);border-color:var(--lil)}
+.wnav{display:flex;align-items:center;justify-content:space-between;margin:22px 0 10px}
+.ar{width:44px;height:44px;border-radius:50%;border:1px solid var(--ln);background:var(--card)}
+.ti{font-size:24px;font-weight:200}
+.ad{color:var(--pk);font-size:14px}
+.strip{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.sd{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 9px;border-radius:99px}
+.sd small{font-size:11px;color:var(--mu)}
+.sd b{font-weight:300;font-size:19px}
+.sd.td b{color:var(--pk)}
+.sd.on{background:var(--pk);color:#fff;font-weight:500}
+.sd.on small,.sd.on b{color:#fff}
+.dots{display:flex;gap:4px;height:6px}
+.dots i{width:6px;height:6px;border-radius:50%;border:1px solid transparent}
+.dots i.part{border-color:var(--pk)}
+.dots i.full{background:var(--pk);border-color:var(--pk)}
+.on .dots i.part{border-color:#fff}
+.on .dots i.full{background:#fff;border-color:#fff}
+.hero{margin-top:14px;border-radius:26px;padding:16px 20px;color:#fff;background:var(--gr);min-height:100px;display:flex;flex-direction:column;justify-content:space-between}
+.hero small{font-size:13px}
+.big{font-size:32px;font-weight:300;line-height:1.15}
+.hp{font-size:13px}
+.card{background:var(--card);border-radius:24px;padding:20px;margin-top:14px}
+.card section+section{margin-top:24px}
+.em{color:var(--mu);font-size:14px;margin:8px 0 0}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--ln)}
+.chk{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--mu);flex:none;position:relative}
+.chk::before{content:"";position:absolute;inset:-9px}
+.chk.on{background:var(--pk);border-color:var(--pk)}
+.chk.on::after{content:"";position:absolute;left:8px;top:3px;width:5px;height:10px;border:solid #fff;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.nm{flex:1}
+.nm.done{color:var(--mu);text-decoration:line-through}
+.tag{font-size:12px;color:var(--ink);background:var(--lil);padding:2px 10px;border-radius:99px;white-space:nowrap}
+.rm{color:var(--mu);font-size:22px;width:44px;height:44px}
+.add{display:block;width:100%;margin-top:12px;padding:12px;border:1px dashed var(--pk);border-radius:14px;text-align:center;color:var(--pk);font-size:14px}
+.ghost{border:1px solid var(--ln);border-radius:99px;padding:7px 16px;font-size:14px;margin-bottom:18px}
+.pk{margin-top:12px;padding:14px;background:var(--bg);border-radius:18px}
+.pr{display:flex;width:100%;align-items:center;gap:10px;padding:10px 0;text-align:start;border-bottom:1px solid var(--ln)}
+.pr span:first-child{flex:1}
+.chs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.ch{border:1px solid var(--pk);color:var(--pk);border-radius:99px;padding:4px 13px;font-size:13px}
+.ch.on{background:var(--lil);border-color:var(--lil)}
+.fm{margin-top:12px}
+input[type=text],input[type=date],input[type=number]{width:100%;font:inherit;font-size:16px;background:var(--bg);color:var(--ink);border:1px solid var(--ln);border-radius:14px;padding:11px 14px;margin-bottom:10px}
+.btns{display:flex;gap:18px;align-items:center;margin-top:4px}
+.pri{background:var(--pk);color:#fff;border-radius:99px;padding:9px 24px;font-size:14px}
+.cn{color:var(--mu);font-size:14px}
+.dl{color:var(--pk);font-size:14px}
+.pc{display:flex;width:100%;align-items:center;gap:10px;background:var(--card);border-radius:18px;padding:14px 16px;margin-top:10px;text-align:start}
+.pc span:first-child{flex:1}
+.pc em{font-style:normal;color:var(--mu);font-size:12px}
+.wk,.grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.wk span{text-align:center;font-size:11px;color:var(--mu);padding-bottom:8px}
+.md{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.md b{font-weight:300;font-size:16px;width:30px;height:30px;line-height:30px;text-align:center;border-radius:50%}
+.md.td b{background:var(--lil);color:var(--pk)}
+.ph-h{display:flex;justify-content:space-between;align-items:center}
+.pa{color:var(--pk);font-size:14px;cursor:pointer}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.pg img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;display:block}
+.ovl{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:20px}
+.sc{position:absolute;inset:0;background:rgba(30,20,35,.6)}
+.pn{position:relative;background:var(--card);border-radius:24px;padding:14px;width:100%;max-width:420px}
+.pn img{width:100%;max-height:62vh;object-fit:contain;border-radius:14px;display:block}
+.pn .btns{justify-content:space-between;margin:14px 6px 2px}
+.br{display:block;font-size:12px;color:var(--mu)}
+.gh{font-size:13px;color:var(--mu);margin:22px 4px 0}
+.srt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px;font-size:13px;color:var(--mu)}
+.srt .ad{margin-inline-start:auto}
+.dt label{display:block;font-size:12px;color:var(--mu)}
+.prw{display:flex;align-items:center;border-bottom:1px solid var(--ln)}
+.prw .pr{flex:1;border:0}
+.rp{color:var(--pk);font-size:17px;width:38px;height:38px}
+.rc{color:var(--mu);font-size:13px}
+.rq{display:flex;gap:10px;align-items:center;padding:8px 0;font-size:13px;color:var(--mu);flex-wrap:wrap}
+.rq .pri{padding:6px 14px;font-size:13px}
+.tm{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--ln)}
+.tm input{margin:0;flex:1;padding:7px 12px;font-size:15px}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="tabs"><button data-tab="week">שבוע</button><button data-tab="month">חודש</button><button data-tab="lib">מוצרים</button><button data-tab="shop">קניות</button></div>
+  <div class="hd"><span>שגרת טיפוח</span><button class="pb" data-act="pl" aria-label="צבעים"></button></div><div id="pl"></div><div id="view"></div>
+</main>
+<div id="ov"></div><div id="tt"></div>
+<script>
+const K='skincare-routine-v1',KP='skincare-photos-v1';
+let S={products:[],days:{}},P={};
+try{S=JSON.parse(localStorage.getItem(K))||S}catch(e){}
+try{P=JSON.parse(localStorage.getItem(KP))||P}catch(e){}
+S.products=S.products||[];S.days=S.days||{};
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const saveP=()=>{try{localStorage.setItem(KP,JSON.stringify(P));return true}catch(e){return false}};
+const MN=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const DN=['יום ראשון','יום שני','יום שלישי','יום רביעי','יום חמישי','יום שישי','שבת'];
+const WK=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+const TAGS=['ניקוי','טונר','סרום','קרם עיניים','קרם לחות','קרם הגנה','טיפול נקודתי','מסכה','שמפו','מרכך','מסכת שיער','שמן שיער','קרם גוף','פילינג גוף','סבון גוף'];
+S.tags=S.tags||[...TAGS];
+S.areas=S.areas||['פנים','גוף','שיער'];
+if(!S.tv){S.tags=[...new Set([...S.tags,...TAGS])];S.tv=1}
+S.tags=S.tags.map(x=>x==='פילופ גוף'?'פילינג גוף':x);S.products.forEach(p=>{if(p.tag==='פילופ גוף')p.tag='פילינג גוף'});
+S.rules=S.rules||[];S.shop=S.shop||[];
+S.products.forEach(p=>{p.area=p.area??'פנים'});
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const key=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+const addDays=(k,n)=>{const d=parse(k);d.setDate(d.getDate()+n);return key(d)};
+const wkStart=k=>addDays(k,-parse(k).getDay());
+const prod=id=>S.products.find(p=>p.id===id);
+const hits=(r,k)=>{if(k<r.from||(r.to&&k>r.to))return false;const d=parse(k);return r.type==='d'||(r.type==='w'&&r.days.includes(d.getDay()))||(r.type==='n'&&mDiff(k,r.a)%r.n===0)||(r.type==='m'&&d.getDate()===parse(r.a).getDate())};
+const dayOf=k=>{const d=S.days[k]||{},o={};['am','pm','tx'].forEach(s=>{const m=(d[s]||[]).map((x,mi)=>({...x,mi})),g=[];S.rules.forEach(r=>{if(r.slots.includes(s)&&hits(r,k)&&!r.skip.includes(k+'|'+s)&&!m.some(x=>x.p===r.p)&&!g.some(x=>x.p===r.p)){const q=prod(r.p);if(q&&!(q.fin&&k>=q.fin))g.push({p:r.p,d:!!(d.cd&&d.cd[s+':'+r.p]),r:r.id})}});o[s]=[...m,...g]});return o};
+const stop=(r,n,k)=>{const rest=r.slots.filter(s=>s!==n),t0=r.to;if(rest.length)S.rules.push({...r,id:'r'+Date.now().toString(36),slots:rest,from:k,to:t0,skip:[]});r.to=addDays(k,-1);if(r.to<r.from)S.rules=S.rules.filter(z=>z!==r)};
+const ensure=k=>{const d=S.days[k]||(S.days[k]={am:[],pm:[]});d.tx=d.tx||[];d.cd=d.cd||{};return d};
+const st=a=>!a.length?'':a.every(x=>x.d)?'full':'part';
+const tg=p=>p.tag?`<span class="tag">${esc(p.tag)}</span>`:'';
+const usedTags=()=>[...new Set(S.products.map(p=>p.tag).filter(Boolean))];
+const tagList=()=>[...new Set([...S.tags,...usedTags()])];
+const nm=p=>esc(p.name)+(p.brand?`<span class="br">${esc(p.brand)}</span>`:'');
+const mDiff=(a,b)=>Math.round((parse(a)-parse(b))/864e5);
+const dc=p=>{if(!p.start)return '';const n=mDiff(U.sel,p.start)+1;return n>=1&&n<=30?`<span class="tag">יום ${n}</span>`:''};
+const pa=p=>{if(!p.open||!p.pao)return '';const e=parse(p.open);e.setMonth(e.getMonth()+p.pao);const l=Math.ceil((e-parse(key(new Date())))/864e5);return `<span class="br">${l<0?'פג תוקף':l<=30?`נשארו ${l} ימים`:`נשארו ${Math.round(l/30)} חודשים`}</span>`};
+const ex=()=>({area:U.dr.area||S.areas[0]||'',start:U.dr.start||'',open:U.dr.open||'',pao:+U.dr.pao||0});
+const fx=()=>{if(U.edit==='new')return '';const p=prod(U.edit);return p&&p.fin?'<div class="btns"><button class="cn" data-act="unfin">החזרה מהארכיון</button></div>':'<div class="btns"><button class="cn" data-act="fin" data-t="1">סיימתי, אקנה שוב</button><button class="cn" data-act="fin" data-t="0">סיימתי, לא אקנה שוב</button></div>'};
+const afc=()=>`<div class="chs seg">${[...S.areas,''].map(a=>`<button class="ch${U.af===a?' on':''}" data-act="afa" data-t="${esc(a)}">${a?esc(a):'הכל'}</button>`).join('')}<button class="ch" data-act="aa2">+</button></div>${U.ai?'<div class="fm"><input type="text" id="an2" placeholder="קטגוריה חדשה" autocomplete="off"><button class="pri" data-act="as2">הוספה</button></div>':''}`;
+const dots=D=>`<span class="dots"><i class="${st(D.am)}"></i><i class="${st(D.pm)}"></i></span>`;
+let U={tab:'week',sel:key(new Date()),mon:null,adding:null,edit:null,tgt:null,dr:{name:'',brand:'',tag:''},flt:'',arm:null,msg:'',ph:null,sort:'name',tm:false,rt:null,rv:'',la:'',af:S.areas[0]||'',ai:false,rq:null,rf:null,pp:null,pl:false,un:null,ar:false,cmp:null};
+
+function chips(){
+  const t=usedTags();if(!t.length)return '';
+  return `<div class="chs">${['',...t].map(x=>`<button class="ch${U.flt===x?' on':''}" data-act="flt" data-t="${esc(x)}">${x?esc(x):'הכל'}</button>`).join('')}</div>`;
+}
+function form(){
+  return `<div class="fm"><input type="text" id="fn" placeholder="שם המוצר" autocomplete="off" value="${esc(U.dr.name)}"><input type="text" id="fb" placeholder="חברה" autocomplete="off" value="${esc(U.dr.brand)}"><div class="chs">${S.areas.map(a=>`<button class="ch${U.dr.area===a?' on':''}" data-act="sar" data-t="${a}">${a}</button>`).join('')}</div><div class="chs">${tagList().map(t=>`<button class="ch${U.dr.tag===t?' on':''}" data-act="stag" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div><input type="text" id="ft" placeholder="או תגית משלך" autocomplete="off" value="${esc(U.dr.tag)}"><details${U.dr.start||U.dr.open||U.dr.pao?' open':''}><summary>פרטים נוספים</summary><div class="dt"><label>תאריך התחלה<input type="date" id="fs" value="${U.dr.start||''}"></label><label>תאריך פתיחה<input type="date" id="fo" value="${U.dr.open||''}"></label><label>תוקף אחרי פתיחה (חודשים)<input type="number" id="fp" min="1" max="60" value="${U.dr.pao||''}"></label></div></details><div class="btns"><button class="pri" data-act="sv">שמירה</button><button class="cn" data-act="fc">ביטול</button>${U.edit!=='new'?`<button class="dl" data-act="dp">${U.arm===U.edit?'למחוק מכל הימים?':'מחיקה'}</button>`:''}</div>${fx()}</div>`;
+}
+function rform(){
+  const f=U.rf,p=prod(f.id),ch=(on,act,t,l)=>`<button class="ch${on?' on':''}" data-act="${act}" data-t="${t}">${l}</button>`;
+  return `<div class="fm"><h3>${esc(p.name)}</h3><div class="lbl"><span>באיזה חלק ביום</span></div><div class="chs">${[['am','בוקר'],['pm','ערב']].map(([s,l])=>ch(f.slots.includes(s),'rs2',s,l)).join('')}</div><div class="lbl"><span>חזרה, מהיום הנבחר</span></div><div class="chs">${[['d','כל יום'],['w','ימים בשבוע'],['n','כל כמה ימים'],['m','כל חודש']].map(([t,l])=>ch(f.type===t,'rt',t,l)).join('')}</div>${f.type==='w'?`<div class="chs">${WK.map((w,i)=>ch(f.days.includes(i),'rd',i,w)).join('')}</div>`:''}${f.type==='n'?`<div class="dt"><label>כל כמה ימים<input type="number" id="rk" min="2" max="60" value="${f.k}"></label></div>`:''}<div class="dt"><label>תאריך סיום (לא חובה)<input type="date" id="re" value="${f.to||''}"></label></div><div class="btns"><button class="pri" data-act="rsv">הוספה</button><button class="cn" data-act="rcx">ביטול</button></div></div>`;
+}
+function amgr(){return `<div class="card"><h3>קטגוריות</h3>${S.areas.map(a=>`<div class="tm"><span class="nm">${esc(a)}</span><button class="dl" data-act="ad" data-t="${esc(a)}">מחיקה</button></div>`).join('')}<div class="fm"><input type="text" id="an" placeholder="קטגוריה חדשה" autocomplete="off"><button class="pri" data-act="as">הוספה</button></div></div>`}
+function vCmp(){
+  const c=U.cmp,all=Object.keys(P).sort().flatMap(w=>(P[w]||[]).map((s,i)=>({w,i,s})));
+  const lb=w=>`${parse(w).getDate()}/${parse(w).getMonth()+1}`;
+  const slot=k=>{const x=c[k]?all.find(y=>y.w+'|'+y.i===c[k]):null;return `<button class="cs${c.s===k?' on':''}" data-act="cs" data-t="${k}">${x?`<img src="${x.s}" alt="תמונת עור">`:'<span>בחרי תמונה</span>'}${x?`<small>שבוע ${lb(x.w)}</small>`:''}</button>`};
+  return `<div class="ovl"><div class="sc" data-act="cx"></div><div class="pn"><div class="cmp">${slot('a')}${slot('b')}</div><div class="pg">${all.map(x=>`<button data-act="cp" data-t="${x.w}|${x.i}"><img src="${x.s}" alt="תמונת עור"></button>`).join('')}</div><div class="btns"><button class="pri" data-act="cx">סגירה</button></div></div></div>`;
+}
+function vShop(){
+  const a=S.products.filter(p=>p.fin&&p.rb);
+  let h='<div class="wnav"><span class="ti">רשימת קניות</span></div><div class="card">';
+  h+=a.map(p=>`<div class="row"><button class="chk" data-act="bought" data-id="${p.id}" aria-label="קניתי"></button><span class="nm">${nm(p)}</span>${tg(p)}</div>`).join('');
+  h+=S.shop.map((s,i)=>`<div class="row"><button class="chk" data-act="sdel" data-i="${i}" aria-label="קניתי"></button><span class="nm">${esc(s)}</span></div>`).join('');
+  if(!a.length&&!S.shop.length)h+='<p class="em">הרשימה ריקה. מוצרים שסימנת "אקנה שוב" יופיעו כאן.</p>';
+  return h+'<div class="fm"><input type="text" id="si" placeholder="להוסיף לרשימה" autocomplete="off"><button class="pri" data-act="sadd">הוספה</button></div></div>';
+}
+function picker(n){
+  const used=dayOf(U.sel)[n].map(x=>x.p);
+  const rest=S.products.filter(p=>!used.includes(p.id)&&!p.fin&&(!U.af||p.area===U.af)&&(!U.flt||p.tag===U.flt));
+  if(U.rf)return '<div class="pk">'+rform()+'</div>';
+  let h='<div class="pk">'+chips();
+  h+=rest.length?rest.map(p=>`<div class="prw"><button class="pr" data-act="pick" data-n="${n}" data-id="${p.id}"><span class="nb">${nm(p)}</span>${tg(p)}</button></div>${U.pp&&U.pp.id===p.id?`<div class="rq"><button class="pri" data-act="p1" data-n="${n}" data-id="${p.id}">רק היום</button><button class="pri" data-act="rp" data-n="${n}" data-id="${p.id}">חוזר…</button></div>`:''}`).join(''):'<p class="em">אין מוצרים להוספה כאן.</p>';
+  h+=U.edit==='new'&&U.tgt===n?form():`<button class="add" data-act="nw" data-n="${n}">+ מוצר חדש</button>`;
+  return h+'<div class="btns"><button class="cn" data-act="cancel">סגירה</button></div></div>';
+}
+function sec(n,label){
+  const items=dayOf(U.sel)[n];
+  if(n==='tx'&&!items.length&&U.adding!==n)return `<section><button class="add" data-act="add" data-n="${n}">+ טיפול מיוחד</button></section>`;
+  let h=`<section><div class="ph-h"><h3>${label}</h3>${items.length?`<button class="pa" data-act="img" data-n="${n}">שיתוף כתמונה</button>`:''}</div>`;
+  if(!items.length&&U.adding!==n)h+='<p class="em">עוד לא נוספו מוצרים</p>';
+  items.forEach((x,i)=>{const p=prod(x.p);if(!p||(U.af&&p.area!==U.af))return;
+    h+=`<div class="row"><button class="chk${x.d?' on':''}" data-act="tick" data-n="${n}" data-id="${x.p}" aria-label="סימון"></button><span class="nm${x.d?' done':''}">${nm(p)}</span>${tg(p)}${dc(p)}${x.r?'<span class="rc">↻</span>':''}<button class="rm" data-act="rm" data-n="${n}" data-id="${x.p}" aria-label="הסרה מהיום">×</button></div>${U.rq&&U.rq.n===n&&U.rq.id===x.p?'<div class="rq"><span>להסיר:</span><button class="pri" data-act="r1">רק היום</button><button class="pri" data-act="rf">מעכשיו והלאה</button><button class="cn" data-act="rq0">ביטול</button></div>':''}`});
+  h+=U.adding===n?picker(n):`<button class="add" data-act="add" data-n="${n}">+ הוספת מוצר</button>`;
+  return h+'</section>';
+}
+function photos(ws){
+  const L=P[ws]||[];
+  return `<div class="card"><div class="ph-h"><h3>העור השבוע</h3><span>${Object.values(P).flat().length>1?'<button class="pa" data-act="cmp">השוואה</button>&nbsp;&nbsp;':''}<label class="pa">+ תמונה<input type="file" id="pf" accept="image/*" multiple hidden></label></span></div>${U.msg?`<p class="em">${U.msg}</p>`:''}${L.length?`<div class="pg">${L.map((s,i)=>`<button data-act="pv" data-i="${i}"><img src="${s}" alt="תמונת עור"></button>`).join('')}</div>`:'<p class="em">אפשר להוסיף תמונה אחת או יותר לכל שבוע.</p>'}</div>`;
+}
+function vWeek(){
+  const ws=wkStart(U.sel),s=parse(ws),e=parse(addDays(ws,6)),today=key(new Date());
+  const lab=s.getMonth()===e.getMonth()?`${MN[s.getMonth()]} ${s.getFullYear()}`:`${MN[s.getMonth()]} – ${MN[e.getMonth()]} ${e.getFullYear()}`;
+  let h=`<div class="wnav"><button class="ar" data-act="wp" aria-label="השבוע הקודם">→</button><span class="ti">${lab}</span><button class="ad" data-act="today">היום</button><button class="ar" data-act="wn" aria-label="השבוע הבא">←</button></div><div class="strip">`;
+  for(let i=0;i<7;i++){const k=addDays(ws,i);h+=`<button class="sd${k===U.sel?' on':''}${k===today?' td':''}" data-act="pd" data-k="${k}"><small>${WK[i]}</small><b>${parse(k).getDate()}</b>${dots(dayOf(k))}</button>`}
+  const D=dayOf(U.sel),all=[...D.am,...D.pm],dn=all.filter(x=>x.d).length,d=parse(U.sel),P1=dayOf(addDays(U.sel,-1));
+  const canCopy=!all.length&&(P1.am.length||P1.pm.length||P1.tx.length);
+  h+=`</div><div class="hero"><small>${DN[d.getDay()]}${U.sel===today?', היום':''}</small><div class="big">${d.getDate()} ב${MN[d.getMonth()]}</div><div class="hp">${all.length?`${dn} מתוך ${all.length} מוצרים סומנו`:'עוד לא נבחרה שגרה ליום הזה'}</div></div>`;
+  h+=`${S.products.length?'':'<div class="card"><h3>ברוכה הבאה</h3><p class="em">כדי להתחיל, הוסיפי את המוצרים שלך למאגר. אחר כך תבחרי מה לעשות בכל יום.</p><div class="btns"><button class="pri" data-act="gl">הוספת מוצרים</button></div></div>'}<div class="card">${canCopy?'<button class="ghost" data-act="copy">העתקה מהיום הקודם</button>':''}${afc()}${sec('am','בוקר')}${sec('pm','ערב')}</div>`;
+  return h+`<div class="card"><h3>יומן עור</h3><textarea id="dn" rows="3" placeholder="איך העור הרגיש היום? מה שמת?">${esc((S.days[U.sel]||{}).note||'')}</textarea></div>`+photos(ws);
+}
+function vMonth(){
+  const y=U.mon.getFullYear(),m=U.mon.getMonth(),first=new Date(y,m,1).getDay(),n=new Date(y,m+1,0).getDate(),today=key(new Date());
+  let h=`<div class="wnav"><button class="ar" data-act="mp" aria-label="החודש הקודם">→</button><span class="ti">${MN[m]} ${y}</span><button class="ar" data-act="mn" aria-label="החודש הבא">←</button></div><div class="card"><div class="wk">${WK.map(w=>`<span>${w}</span>`).join('')}</div><div class="grid">`;
+  for(let i=0;i<first;i++)h+='<div></div>';
+  for(let d=1;d<=n;d++){const k=key(new Date(y,m,d));h+=`<button class="md${k===today?' td':''}" data-act="pm" data-k="${k}"><b>${d}</b>${dots(dayOf(k))}</button>`}
+  return h+'</div><div class="lg"><span>נקודה ימנית: בוקר</span><span>נקודה שמאלית: ערב</span><span>מלאה: הושלם</span></div></div>';
+}
+function tmgr(){
+  let h='<div class="card"><h3>התגיות שלי</h3>';
+  tagList().forEach(t=>{h+=`<div class="tm">${U.rt===t?`<input type="text" id="rn" value="${esc(U.rv)}" autocomplete="off"><button class="pri" data-act="rs">שמירה</button>`:`<span class="nm">${esc(t)}</span><button class="cn" data-act="rn" data-t="${esc(t)}">שינוי שם</button><button class="dl" data-act="td" data-t="${esc(t)}">${U.arm==='t:'+t?'למחוק?':'מחיקה'}</button>`}</div>`});
+  return h+'<div class="fm"><input type="text" id="nt" placeholder="תגית חדשה" autocomplete="off"><button class="pri" data-act="ta">הוספה</button></div></div>';
+}
+function vLib(){
+  let h=`<div class="wnav"><span class="ti">המוצרים שלי</span><div><button class="ad" data-act="nl">+ מוצר חדש</button></div></div><div class="srt"><span>מיון:</span>${[['name','א׳-ב׳'],['tag','קטגוריה'],['brand','חברה']].map(([k,l])=>`<button class="ch${U.sort===k?' on':''}" data-act="srt" data-t="${k}">${l}</button>`).join('')}<button class="ad" data-act="tm">${U.tm?'סגירת תגיות':'ניהול תגיות'}</button></div><div class="chs">${['',...S.areas,'ארכיון'].map(a=>`<button class="ch${U.la===a?' on':''}" data-act="laa" data-t="${a}">${a||'הכל'}</button>`).join('')}<button class="ch" data-act="aa">+ קטגוריה</button></div>${chips()}`;
+  if(U.edit==='new'&&!U.tgt)h+=`<div class="card">${form()}</div>`;
+  if(U.ar)h+=amgr();
+  if(U.tm)h+=tmgr();
+  const list=S.products.filter(p=>(!U.flt||p.tag===U.flt)&&(U.la==='ארכיון'?p.fin:!p.fin&&(!U.la||p.area===U.la))).sort((a,b)=>a.name.localeCompare(b.name,'he'));
+  if(!list.length)return h+'<p class="em">עוד אין מוצרים. הוסיפי את הראשון.</p>';
+  const card=p=>U.edit===p.id?`<div class="card">${form()}</div>`:`<button class="pc" data-act="ep" data-id="${p.id}"><span class="nb">${nm(p)}${pa(p)}</span>${tg(p)}${p.fin?`<span class="tag">${p.rb?'קונה שוב':'לא קונה שוב'}</span>`:''}<em>עריכה</em></button>`;
+  if(U.sort==='name')return h+list.map(card).join('');
+  const f=U.sort==='brand'?'brand':'tag',g={};
+  list.forEach(p=>(g[p[f]||'']=g[p[f]||'']||[]).push(p));
+  return h+Object.keys(g).sort((a,b)=>!a?1:!b?-1:a.localeCompare(b,'he')).map(k=>`<div class="gh">${k?esc(k):f==='brand'?'ללא חברה':'ללא קטגוריה'}</div>`+g[k].map(card).join('')).join('');
+}
+function vOv(){
+  const L=P[U.ph.wk]||[];
+  return `<div class="ovl"><div class="sc" data-act="vc"></div><div class="pn"><img src="${L[U.ph.i]}" alt="תמונת עור"><div class="btns"><button class="pri" data-act="vc">סגירה</button><button class="dl" data-act="pdel">${U.arm==='ph'?'למחוק?':'מחיקה'}</button></div></div></div>`;
+}
+function render(){
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===U.tab));
+  $('#view').innerHTML={week:vWeek,month:vMonth,lib:vLib,shop:vShop}[U.tab]();
+  $('#ov').innerHTML=U.ph?vOv():U.cmp?vCmp():'';
+  $('#pl').innerHTML=U.pl?`<div class="card"><h3>צבעים</h3><div class="sws">${PAL.map(([l,h,s],i)=>`<button class="sw${S.pal===i?' on':''}" data-act="pc" data-i="${i}"><i style="background:hsl(${h} ${s}% 52%)"></i><span>${l}</span></button>`).join('')}</div><h3 style="margin-top:22px">גיבוי</h3><p class="em">${S.bk?'גיבוי אחרון: '+S.bk:'עוד לא נעשה גיבוי'}. הוא כולל מוצרים, שגרות, יומן ותמונות.</p><div class="btns"><button class="pri" data-act="bkp">הורדת גיבוי</button><label class="pa">שחזור מקובץ<input type="file" id="rs" accept=".json,application/json" hidden></label></div><p class="em">שחזור מחליף את כל מה שקיים עכשיו.</p></div>`:'';
+}
+const PAL=[['ורוד',335,80],['אפרסק',16,75],['מרווה',95,24],['כחול',210,50],['לילך',268,45],['חום',30,32],['יער',150,30],['בורדו',348,42]];
+function pal(i){const [,h,s]=PAL[i],d=matchMedia('(prefers-color-scheme: dark)').matches,r=document.documentElement.style,c=(x,y,z)=>`hsl(${x} ${y}% ${z}%)`;
+  r.setProperty('--pk',c(h,s,d?68:52));r.setProperty('--lil',c(h,Math.min(s,55),d?26:91));r.setProperty('--bg',c(h,Math.min(s,40)/2,d?10:95));
+  r.setProperty('--gr',`radial-gradient(circle at 12% 92%,${c(h+30,s,70)} 0,transparent 55%),radial-gradient(circle at 92% 12%,${c(h-35,s,72)} 0,transparent 60%),linear-gradient(135deg,${c(h,s,58)},${c(h+20,s,64)})`)}
+if(S.pal!=null)pal(S.pal);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(S.pal!=null)pal(S.pal)});
+async function out(name,blob){
+  const f=new File([blob],name,{type:blob.type});
+  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e&&e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);
+}
+function shareImg(n){
+  const d=parse(U.sel),L=dayOf(U.sel)[n].filter(x=>prod(x.p)&&(!U.af||prod(x.p).area===U.af)).slice(0,12);
+  const cs=getComputedStyle(document.documentElement),g=(v,f)=>cs.getPropertyValue(v).trim()||f;
+  const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;
+  const x=c.getContext('2d');x.direction='rtl';x.textAlign='right';
+  x.fillStyle=g('--bg','#f8f1f6');x.fillRect(0,0,W,H);
+  const gr=x.createLinearGradient(0,0,W,620);gr.addColorStop(0,g('--pk','#f0509a'));gr.addColorStop(1,g('--lil','#f3d9fb'));
+  x.fillStyle=gr;x.fillRect(0,0,W,620);
+  x.fillStyle='#fff';x.font='300 54px Heebo,sans-serif';x.fillText(DN[d.getDay()],W-90,230);
+  x.font='200 116px Heebo,sans-serif';x.fillText(d.getDate()+' ב'+MN[d.getMonth()],W-90,370);
+  x.font='400 62px Heebo,sans-serif';x.fillText((n==='am'?'שגרת בוקר':'שגרת ערב')+(U.af?' – '+U.af:''),W-90,510);
+  const ink=g('--ink','#3b3340'),mu=g('--mu','#7f7587'),pk=g('--pk','#f0509a');let y=760;
+  L.forEach(it=>{const p=prod(it.p);
+    x.fillStyle=pk;x.beginPath();x.arc(W-100,y-18,14,0,7);x.fill();
+    x.fillStyle=ink;x.font='400 56px Heebo,sans-serif';x.fillText(p.name,W-150,y);
+    if(p.brand){x.fillStyle=mu;x.font='300 38px Heebo,sans-serif';x.fillText(p.brand,W-150,y+52)}
+    y+=p.brand?140:100});
+  c.toBlob(b=>{if(b)out('routine-'+n+'-'+U.sel+'.png',b)},'image/png');
+}
+document.addEventListener('change',e=>{
+  if(e.target.id!=='rs')return;const f=e.target.files[0];if(!f)return;
+  f.text().then(tx=>{try{const o=JSON.parse(tx);if(!o.S||!Array.isArray(o.S.products))throw 0;
+    localStorage.setItem(K,JSON.stringify(o.S));localStorage.setItem(KP,JSON.stringify(o.P||{}));location.reload()}
+  catch(err){$('#tt').innerHTML='<div><span>הקובץ לא תקין</span></div>';setTimeout(()=>{$('#tt').innerHTML=''},4000)}});
+});
+let tmr;function toast(m,s){U.un=s;$('#tt').innerHTML=`<div><span>${m}</span><button data-act="undo">ביטול</button></div>`;clearTimeout(tmr);tmr=setTimeout(()=>{$('#tt').innerHTML='';U.un=null},6000)}
+const shrink=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.72))};im.onerror=no;im.src=r.result};r.onerror=no;r.readAsDataURL(f)});
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act],[data-tab]');if(!b)return;
+  if(b.dataset.tab){U.tab=b.dataset.tab;U.adding=U.edit=U.tgt=null;U.flt='';if(U.tab==='month'){const d=parse(U.sel);U.mon=new Date(d.getFullYear(),d.getMonth(),1)}render();return}
+  const a=b.dataset.act,n=b.dataset.n,i=+b.dataset.i,t=b.dataset.t,id=b.dataset.id;
+  const UN=['rm','r1','rf','sdel','dp','ad'].includes(a)?JSON.stringify(S):null;
+  if(a==='wp'||a==='wn'){U.sel=addDays(U.sel,a==='wn'?7:-7);U.adding=U.edit=null}
+  else if(a==='pd'){U.sel=b.dataset.k;U.adding=U.edit=null}
+  else if(a==='mp'||a==='mn')U.mon=new Date(U.mon.getFullYear(),U.mon.getMonth()+(a==='mn'?1:-1),1);
+  else if(a==='pm'){U.sel=b.dataset.k;U.tab='week'}
+  else if(a==='tick'){const x=dayOf(U.sel)[n].find(y=>y.p===id),E=ensure(U.sel);if(x.r){const q=n+':'+id;E.cd[q]=!E.cd[q]}else{const m=E[n][x.mi];m.d=!m.d}}
+  else if(a==='rm'){const x=dayOf(U.sel)[n].find(y=>y.p===id);if(x.r)U.rq={n,id,r:x.r};else ensure(U.sel)[n].splice(x.mi,1)}
+  else if(a==='r1'){const r=S.rules.find(z=>z.id===U.rq.r);r.skip.push(U.sel+'|'+U.rq.n);U.rq=null}
+  else if(a==='rf'){const r=S.rules.find(z=>z.id===U.rq.r);stop(r,U.rq.n,U.sel);U.rq=null}
+  else if(a==='rq0')U.rq=null
+  else if(a==='rp'){U.pp=null;U.rf={id,slots:[n],type:'d',days:[parse(U.sel).getDay()],k:2,to:''}}
+  else if(a==='rs2'){const f=U.rf;f.slots=f.slots.includes(t)?f.slots.filter(s=>s!==t):[...f.slots,t]}
+  else if(a==='rt')U.rf.type=t
+  else if(a==='rd'){const f=U.rf,d=+t;f.days=f.days.includes(d)?f.days.filter(x=>x!==d):[...f.days,d]}
+  else if(a==='rcx')U.rf=null
+  else if(a==='rsv'){const f=U.rf;if(!f.slots.length||(f.type==='w'&&!f.days.length))return;const kk=$('#rk'),re=$('#re');S.rules.push({id:'r'+Date.now().toString(36),p:f.id,slots:f.slots,type:f.type,days:f.days,n:Math.max(2,+(kk?kk.value:f.k)||2),from:U.sel,a:U.sel,to:re&&re.value?re.value:'',skip:[]});U.rf=null;U.adding=null}
+  else if(a==='bought'){const p=prod(id);p.fin='';p.rb=false;p.open=''}
+  else if(a==='sdel')S.shop.splice(i,1);
+  else if(a==='sadd'){const v=$('#si').value.trim();if(v)S.shop.push(v)}
+  else if(a==='add'){U.rf=U.pp=null;U.adding=n;U.flt='';U.edit=null}
+  else if(a==='cancel'){U.adding=U.edit=U.tgt=U.rf=null}
+  else if(a==='pick')U.pp={id};
+  else if(a==='flt')U.flt=t;
+  else if(a==='nw'||a==='nl'){U.edit='new';U.tgt=a==='nw'?n:null;U.dr={name:'',brand:'',tag:'',area:U.af||S.areas[0]||'',start:'',open:'',pao:''}}
+  else if(a==='ep'){const p=prod(id);U.edit=id;U.arm=null;U.dr={name:p.name,brand:p.brand||'',tag:p.tag||'',area:p.area||'',start:p.start||'',open:p.open||'',pao:p.pao||''}}
+  else if(a==='stag')U.dr.tag=U.dr.tag===t?'':t;
+  else if(a==='fc'){U.edit=U.tgt=U.arm=null}
+  else if(a==='sv'){
+    const name=U.dr.name.trim(),brand=U.dr.brand.trim(),tag=U.dr.tag.trim();if(!name)return;
+    if(U.edit==='new'){const np={id:'p'+Date.now().toString(36),name,brand,tag,...ex()};S.products.push(np);if(U.tgt)ensure(U.sel)[U.tgt].push({p:np.id,d:false})}
+    else{const p=prod(U.edit);p.name=name;p.brand=brand;p.tag=tag;Object.assign(p,ex())}
+    U.edit=U.tgt=null;
+  }
+  else if(a==='dp'){
+    if(0);
+    else{const x=U.edit;S.rules=S.rules.filter(r=>r.p!==x);S.products=S.products.filter(p=>p.id!==x);Object.values(S.days).forEach(d=>{d.am=d.am.filter(y=>y.p!==x);d.pm=d.pm.filter(y=>y.p!==x);d.tx=(d.tx||[]).filter(y=>y.p!==x)});U.edit=U.arm=null}
+  }
+  else if(a==='copy'){const D=ensure(U.sel),Q=dayOf(addDays(U.sel,-1));['am','pm','tx'].forEach(s=>D[s]=Q[s].filter(x=>!x.r).map(x=>({p:x.p,d:false})))}
+  else if(a==='srt')U.sort=t;
+  else if(a==='img')shareImg(n);
+  else if(a==='bkp'){S.bk=key(new Date());save();out('skincare-backup-'+S.bk+'.json',new Blob([JSON.stringify({v:1,S,P})],{type:'application/json'}))}
+  else if(a==='aa')U.ar=!U.ar;
+  else if(a==='as'){const v=$('#an').value.trim();if(v&&!S.areas.includes(v))S.areas.push(v)}
+  else if(a==='ad'){S.areas=S.areas.filter(x=>x!==t);S.products.forEach(p=>{if(p.area===t)p.area=''});if(U.la===t)U.la='';if(U.af===t)U.af=''}
+  else if(a==='cmp')U.cmp={a:null,b:null,s:'a'};
+  else if(a==='cs')U.cmp.s=t;
+  else if(a==='cp'){U.cmp[U.cmp.s]=t;U.cmp.s=U.cmp.s==='a'?'b':'a'}
+  else if(a==='cx')U.cmp=null;
+  else if(a==='p1'){ensure(U.sel)[n].push({p:id,d:false});U.pp=null}
+  else if(a==='today'){U.sel=key(new Date());U.adding=U.edit=null}
+  else if(a==='gl'){U.tab='lib';U.edit='new';U.tgt=null;U.dr={name:'',brand:'',tag:'',area:S.areas[0]||'',start:'',open:'',pao:''}}
+  else if(a==='pl')U.pl=!U.pl;
+  else if(a==='pc'){S.pal=i;pal(i)}
+  else if(a==='undo'){S=JSON.parse(U.un);U.un=null;$('#tt').innerHTML=''}
+  else if(a==='sar')U.dr.area=t;
+  else if(a==='laa')U.la=t;
+  else if(a==='afa')U.af=t;
+  else if(a==='aa2')U.ai=!U.ai;
+  else if(a==='as2'){const v=$('#an2').value.trim();if(v&&!S.areas.includes(v))S.areas.push(v);if(v)U.af=v;U.ai=false}
+  else if(a==='fin'){const p=prod(U.edit);p.fin=key(new Date());p.rb=t==='1';U.edit=null}
+  else if(a==='unfin'){const p=prod(U.edit);p.fin='';U.edit=null}
+  else if(a==='tm'){U.tm=!U.tm;U.rt=null;U.arm=null}
+  else if(a==='rn'){U.rt=t;U.rv=t}
+  else if(a==='rs'){const v=($('#rn').value||'').trim(),o=U.rt;if(v&&v!==o){S.tags=[...new Set(tagList().map(x=>x===o?v:x))];S.products.forEach(p=>{if(p.tag===o)p.tag=v});if(U.flt===o)U.flt=v}U.rt=null}
+  else if(a==='td'){if(U.arm!=='t:'+t)U.arm='t:'+t;else{S.tags=tagList().filter(x=>x!==t);S.products.forEach(p=>{if(p.tag===t)p.tag=''});if(U.flt===t)U.flt='';U.arm=null}}
+  else if(a==='ta'){const v=($('#nt').value||'').trim();if(v)S.tags=[...new Set([...tagList(),v])]}
+  else if(a==='pv')U.ph={wk:wkStart(U.sel),i};
+  else if(a==='vc'){U.ph=null;U.arm=null}
+  else if(a==='pdel'){
+    if(U.arm!=='ph')U.arm='ph';
+    else{P[U.ph.wk].splice(U.ph.i,1);saveP();U.ph=null;U.arm=null;U.msg=''}
+  }
+  save();render();if(UN)toast(a==='dp'?'המוצר נמחק':'הוסר',UN);
+  if(a==='nw'||a==='nl'||a==='ep'){const f=$('#fn');if(f)f.focus()}
+});
+let tx0=null,ty0=0;document.addEventListener('touchstart',e=>{tx0=e.touches[0].clientX;ty0=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{if(tx0===null||U.tab!=='week'||U.ph)return;const dx=e.changedTouches[0].clientX-tx0,dy=e.changedTouches[0].clientY-ty0;tx0=null;if(Math.abs(dx)>80&&Math.abs(dy)<50&&!e.target.closest('input,textarea')){U.sel=addDays(U.sel,dx<0?7:-7);render()}},{passive:true});
+document.addEventListener('input',e=>{if(e.target.id==='dn'){ensure(U.sel).note=e.target.value;save()}if(e.target.id==='fn')U.dr.name=e.target.value;if(e.target.id==='fb')U.dr.brand=e.target.value;if(e.target.id==='fs')U.dr.start=e.target.value;if(e.target.id==='fo')U.dr.open=e.target.value;if(e.target.id==='fp')U.dr.pao=e.target.value;if(e.target.id==='ft')U.dr.tag=e.target.value});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='fn'){const b=$('[data-act="sv"]');if(b)b.click()}});
+document.addEventListener('change',async e=>{
+  if(e.target.id!=='pf')return;
+  const ws=wkStart(U.sel),files=[...e.target.files];U.msg='';
+  for(const f of files){
+    try{const s=await shrink(f);(P[ws]=P[ws]||[]).push(s);if(!saveP()){P[ws].pop();U.msg='אין מספיק מקום לשמירה. אפשר למחוק תמונות ישנות.';break}}
+    catch(err){U.msg='לא הצלחתי לקרוא את התמונה.';break}
+  }
+  render();
+});
+render();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+</script>
+</body>
+</html>
