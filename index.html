@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#f8f1f6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="שגרת טיפוח">
+<meta name="apple-mobile-web-app-title" content="Skincare Routine">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -131,6 +131,13 @@ input[type=text],input[type=date],input[type=number]{width:100%;font:inherit;fon
 .rq .pri{padding:6px 14px;font-size:13px}
 .tm{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--ln)}
 .tm input{margin:0;flex:1;padding:7px 12px;font-size:15px}
+input[type=date],input[type=number]{display:block;min-width:0;max-width:100%;-webkit-appearance:none;appearance:none;height:48px;line-height:1.2}
+input[type=date]::-webkit-date-and-time-value{text-align:start;min-height:1.2em}
+.dt,.dt label{min-width:0}
+.nm,.nb{min-width:0;overflow-wrap:anywhere}
+.tag{max-width:45%;overflow:hidden;text-overflow:ellipsis}
+.ch.sg{border-style:dashed}
+.fact #fb,.fact .tagrow,.fact #ft,.fact details{display:none}
 </style>
 </head>
 <body>
@@ -147,9 +154,9 @@ try{P=JSON.parse(localStorage.getItem(KP))||P}catch(e){}
 S.products=S.products||[];S.days=S.days||{};
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
 const saveP=()=>{try{localStorage.setItem(KP,JSON.stringify(P));return true}catch(e){return false}};
-const MN=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
-const DN=['יום ראשון','יום שני','יום שלישי','יום רביעי','יום חמישי','יום שישי','שבת'];
-const WK=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+let MN=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+let DN=['יום ראשון','יום שני','יום שלישי','יום רביעי','יום חמישי','יום שישי','שבת'];
+let WK=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
 const TAGS=['ניקוי','טונר','סרום','קרם עיניים','קרם לחות','קרם הגנה','טיפול נקודתי','מסכה','שמפו','מרכך','מסכת שיער','שמן שיער','קרם גוף','פילינג גוף','סבון גוף'];
 S.tags=S.tags||[...TAGS];
 S.areas=S.areas||['פנים','גוף','שיער'];
@@ -177,7 +184,7 @@ const nm=p=>esc(p.name)+(p.brand?`<span class="br">${esc(p.brand)}</span>`:'');
 const mDiff=(a,b)=>Math.round((parse(a)-parse(b))/864e5);
 const dc=p=>{if(!p.start)return '';const n=mDiff(U.sel,p.start)+1;return n>=1&&n<=30?`<span class="tag">יום ${n}</span>`:''};
 const pa=p=>{if(!p.open||!p.pao)return '';const e=parse(p.open);e.setMonth(e.getMonth()+p.pao);const l=Math.ceil((e-parse(key(new Date())))/864e5);return `<span class="br">${l<0?'פג תוקף':l<=30?`נשארו ${l} ימים`:`נשארו ${Math.round(l/30)} חודשים`}</span>`};
-const ex=()=>({area:U.dr.area||S.areas[0]||'',start:U.dr.start||'',open:U.dr.open||'',pao:+U.dr.pao||0});
+const ex=()=>({area:U.dr.area||S.areas[0]||'',start:U.dr.start||'',open:U.dr.open||'',pao:+U.dr.pao||0,act:U.dr.act?1:0});
 const fx=()=>{if(U.edit==='new')return '';const p=prod(U.edit);return p&&p.fin?'<div class="btns"><button class="cn" data-act="unfin">החזרה מהארכיון</button></div>':'<div class="btns"><button class="cn" data-act="fin" data-t="1">סיימתי, אקנה שוב</button><button class="cn" data-act="fin" data-t="0">סיימתי, לא אקנה שוב</button></div>'};
 const afc=()=>`<div class="chs seg">${[...S.areas,''].map(a=>`<button class="ch${U.af===a?' on':''}" data-act="afa" data-t="${esc(a)}">${a?esc(a):'הכל'}</button>`).join('')}<button class="ch" data-act="aa2">+</button></div>${U.ai?'<div class="fm"><input type="text" id="an2" placeholder="קטגוריה חדשה" autocomplete="off"><button class="pri" data-act="as2">הוספה</button></div>':''}`;
 const dots=D=>`<span class="dots"><i class="${st(D.am)}"></i><i class="${st(D.pm)}"></i></span>`;
@@ -188,7 +195,7 @@ function chips(){
   return `<div class="chs">${['',...t].map(x=>`<button class="ch${U.flt===x?' on':''}" data-act="flt" data-t="${esc(x)}">${x?esc(x):'הכל'}</button>`).join('')}</div>`;
 }
 function form(){
-  return `<div class="fm"><input type="text" id="fn" placeholder="שם המוצר" autocomplete="off" value="${esc(U.dr.name)}"><input type="text" id="fb" placeholder="חברה" autocomplete="off" value="${esc(U.dr.brand)}"><div class="chs">${S.areas.map(a=>`<button class="ch${U.dr.area===a?' on':''}" data-act="sar" data-t="${a}">${a}</button>`).join('')}</div><div class="chs">${tagList().map(t=>`<button class="ch${U.dr.tag===t?' on':''}" data-act="stag" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div><input type="text" id="ft" placeholder="או תגית משלך" autocomplete="off" value="${esc(U.dr.tag)}"><details${U.dr.start||U.dr.open||U.dr.pao?' open':''}><summary>פרטים נוספים</summary><div class="dt"><label>תאריך התחלה<input type="date" id="fs" value="${U.dr.start||''}"></label><label>תאריך פתיחה<input type="date" id="fo" value="${U.dr.open||''}"></label><label>תוקף אחרי פתיחה (חודשים)<input type="number" id="fp" min="1" max="60" value="${U.dr.pao||''}"></label></div></details><div class="btns"><button class="pri" data-act="sv">שמירה</button><button class="cn" data-act="fc">ביטול</button>${U.edit!=='new'?`<button class="dl" data-act="dp">${U.arm===U.edit?'למחוק מכל הימים?':'מחיקה'}</button>`:''}</div>${fx()}</div>`;
+  return `<div class="fm${U.dr.act?' fact':''}"><input type="text" id="fn" placeholder="${U.dr.act?'שם הפעולה':'שם המוצר'}" autocomplete="off" value="${esc(U.dr.name)}"><input type="text" id="fb" placeholder="חברה" autocomplete="off" value="${esc(U.dr.brand)}"><div class="chs">${S.areas.map(a=>`<button class="ch${U.dr.area===a?' on':''}" data-act="sar" data-t="${a}">${a}</button>`).join('')}</div><div class="chs tagrow">${tagList().map(t=>`<button class="ch${U.dr.tag===t?' on':''}" data-act="stag" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div><input type="text" id="ft" placeholder="או תגית משלך" autocomplete="off" value="${esc(U.dr.tag)}"><details${U.dr.start||U.dr.open||U.dr.pao?' open':''}><summary>פרטים נוספים</summary><div class="dt"><label>תאריך התחלה<input type="date" id="fs" value="${U.dr.start||''}"></label><label>תאריך פתיחה<input type="date" id="fo" value="${U.dr.open||''}"></label><label>תוקף אחרי פתיחה (חודשים)<input type="number" id="fp" min="1" max="60" value="${U.dr.pao||''}"></label></div></details><div class="btns"><button class="pri" data-act="sv">שמירה</button><button class="cn" data-act="fc">ביטול</button>${U.edit!=='new'?`<button class="dl" data-act="dp">${U.arm===U.edit?'למחוק מכל הימים?':'מחיקה'}</button>`:''}</div>${fx()}</div>`;
 }
 function rform(){
   const f=U.rf,p=prod(f.id),ch=(on,act,t,l)=>`<button class="ch${on?' on':''}" data-act="${act}" data-t="${t}">${l}</button>`;
@@ -209,23 +216,30 @@ function vShop(){
   if(!a.length&&!S.shop.length)h+='<p class="em">הרשימה ריקה. מוצרים שסימנת "אקנה שוב" יופיעו כאן.</p>';
   return h+'<div class="fm"><input type="text" id="si" placeholder="להוסיף לרשימה" autocomplete="off"><button class="pri" data-act="sadd">הוספה</button></div></div>';
 }
+const SUG=()=>LANG()==='en'?{"פנים": ["Eyebrow shaping", "Face mask", "Exfoliate", "Gua sha", "Facial steam", "Eye mask", "Lip scrub"], "גוף": ["Shave", "Wax", "Body scrub", "Dry brushing", "Manicure", "Pedicure", "Nail care", "Teeth whitening"], "שיער": ["Wash", "Hair mask", "Scalp massage", "Hair oil", "Trim ends", "Color"], "x": ["Nail care", "Eyebrow shaping", "Shave", "Wax", "Teeth whitening"]}:{"פנים": ["סידור גבות", "מסכת פנים", "פילינג פנים", "גואשה", "אדים לפנים", "מסכת עיניים", "פילינג שפתיים"], "גוף": ["גילוח", "אפילציה", "פילינג גוף", "הברשת גוף יבשה", "מניקור", "פדיקור", "סידור ציפורניים", "הלבנת שיניים"], "שיער": ["חפיפה", "מסכת שיער", "עיסוי קרקפת", "שמן לשיער", "חיתוך קצוות", "צביעה"], "x": ["סידור ציפורניים", "סידור גבות", "גילוח", "אפילציה", "הלבנת שיניים"]};
+function actPick(n,used){
+  const ar=U.af||S.areas[0]||'',mine=S.products.filter(p=>p.act&&!p.fin&&!used.includes(p.id)&&(!U.af||p.area===U.af));
+  const have=new Set(S.products.filter(p=>p.act&&p.area===ar).map(p=>p.name)),sg=(SUG()[ar]||SUG().x).filter(x=>!have.has(x));
+  const pp=U.pp&&mine.some(p=>p.id===U.pp.id)?`<div class="rq"><button class="pri" data-act="p1" data-n="${n}" data-id="${U.pp.id}">רק היום</button><button class="pri" data-act="rp" data-n="${n}" data-id="${U.pp.id}">חוזר…</button></div>`:'';
+  return `<div class="lbl"><span>פעולות</span></div><div class="chs">${mine.map(p=>`<button class="ch" data-act="pick" data-n="${n}" data-id="${p.id}">${esc(p.name)}</button>`).join('')}${sg.map(x=>`<button class="ch sg" data-act="sug" data-n="${n}" data-t="${esc(x)}">+ ${esc(x)}</button>`).join('')}</div>${pp}<div class="fm"><input type="text" id="ac" placeholder="פעולה חדשה, למשל גילוח" autocomplete="off"><button class="pri" data-act="acn" data-n="${n}">הוספה</button></div>`;
+}
 function picker(n){
   const used=dayOf(U.sel)[n].map(x=>x.p);
-  const rest=S.products.filter(p=>!used.includes(p.id)&&!p.fin&&(!U.af||p.area===U.af)&&(!U.flt||p.tag===U.flt));
+  const rest=S.products.filter(p=>!used.includes(p.id)&&!p.fin&&!p.act&&(!U.af||p.area===U.af)&&(!U.flt||p.tag===U.flt));
   if(U.rf)return '<div class="pk">'+rform()+'</div>';
   let h='<div class="pk">'+chips();
   h+=rest.length?rest.map(p=>`<div class="prw"><button class="pr" data-act="pick" data-n="${n}" data-id="${p.id}"><span class="nb">${nm(p)}</span>${tg(p)}</button></div>${U.pp&&U.pp.id===p.id?`<div class="rq"><button class="pri" data-act="p1" data-n="${n}" data-id="${p.id}">רק היום</button><button class="pri" data-act="rp" data-n="${n}" data-id="${p.id}">חוזר…</button></div>`:''}`).join(''):'<p class="em">אין מוצרים להוספה כאן.</p>';
+  h+=actPick(n,used);
   h+=U.edit==='new'&&U.tgt===n?form():`<button class="add" data-act="nw" data-n="${n}">+ מוצר חדש</button>`;
   return h+'<div class="btns"><button class="cn" data-act="cancel">סגירה</button></div></div>';
 }
 function sec(n,label){
   const items=dayOf(U.sel)[n];
-  if(n==='tx'&&!items.length&&U.adding!==n)return `<section><button class="add" data-act="add" data-n="${n}">+ טיפול מיוחד</button></section>`;
   let h=`<section><div class="ph-h"><h3>${label}</h3>${items.length?`<button class="pa" data-act="img" data-n="${n}">שיתוף כתמונה</button>`:''}</div>`;
   if(!items.length&&U.adding!==n)h+='<p class="em">עוד לא נוספו מוצרים</p>';
   items.forEach((x,i)=>{const p=prod(x.p);if(!p||(U.af&&p.area!==U.af))return;
     h+=`<div class="row"><button class="chk${x.d?' on':''}" data-act="tick" data-n="${n}" data-id="${x.p}" aria-label="סימון"></button><span class="nm${x.d?' done':''}">${nm(p)}</span>${tg(p)}${dc(p)}${x.r?'<span class="rc">↻</span>':''}<button class="rm" data-act="rm" data-n="${n}" data-id="${x.p}" aria-label="הסרה מהיום">×</button></div>${U.rq&&U.rq.n===n&&U.rq.id===x.p?'<div class="rq"><span>להסיר:</span><button class="pri" data-act="r1">רק היום</button><button class="pri" data-act="rf">מעכשיו והלאה</button><button class="cn" data-act="rq0">ביטול</button></div>':''}`});
-  h+=U.adding===n?picker(n):`<button class="add" data-act="add" data-n="${n}">+ הוספת מוצר</button>`;
+  h+=U.adding===n?picker(n):`<button class="add" data-act="add" data-n="${n}">+ הוספת מוצר או פעולה</button>`;
   return h+'</section>';
 }
 function photos(ws){
@@ -256,11 +270,11 @@ function tmgr(){
   return h+'<div class="fm"><input type="text" id="nt" placeholder="תגית חדשה" autocomplete="off"><button class="pri" data-act="ta">הוספה</button></div></div>';
 }
 function vLib(){
-  let h=`<div class="wnav"><span class="ti">המוצרים שלי</span><div><button class="ad" data-act="nl">+ מוצר חדש</button></div></div><div class="srt"><span>מיון:</span>${[['name','א׳-ב׳'],['tag','קטגוריה'],['brand','חברה']].map(([k,l])=>`<button class="ch${U.sort===k?' on':''}" data-act="srt" data-t="${k}">${l}</button>`).join('')}<button class="ad" data-act="tm">${U.tm?'סגירת תגיות':'ניהול תגיות'}</button></div><div class="chs">${['',...S.areas,'ארכיון'].map(a=>`<button class="ch${U.la===a?' on':''}" data-act="laa" data-t="${a}">${a||'הכל'}</button>`).join('')}<button class="ch" data-act="aa">+ קטגוריה</button></div>${chips()}`;
+  let h=`<div class="wnav"><span class="ti">המוצרים שלי</span><div><button class="ad" data-act="${U.la==='פעולות'?'na':'nl'}">${U.la==='פעולות'?'+ פעולה חדשה':'+ מוצר חדש'}</button></div></div><div class="srt"><span>מיון:</span>${[['name','א׳-ב׳'],['tag','קטגוריה'],['brand','חברה']].map(([k,l])=>`<button class="ch${U.sort===k?' on':''}" data-act="srt" data-t="${k}">${l}</button>`).join('')}<button class="ad" data-act="tm">${U.tm?'סגירת תגיות':'ניהול תגיות'}</button></div><div class="chs">${['',...S.areas,'פעולות','ארכיון'].map(a=>`<button class="ch${U.la===a?' on':''}" data-act="laa" data-t="${a}">${a||'הכל'}</button>`).join('')}<button class="ch" data-act="aa">+ קטגוריה</button></div>${chips()}`;
   if(U.edit==='new'&&!U.tgt)h+=`<div class="card">${form()}</div>`;
   if(U.ar)h+=amgr();
   if(U.tm)h+=tmgr();
-  const list=S.products.filter(p=>(!U.flt||p.tag===U.flt)&&(U.la==='ארכיון'?p.fin:!p.fin&&(!U.la||p.area===U.la))).sort((a,b)=>a.name.localeCompare(b.name,'he'));
+  const list=S.products.filter(p=>(!U.flt||p.tag===U.flt)&&(U.la==='ארכיון'?p.fin:U.la==='פעולות'?(p.act&&!p.fin):!p.fin&&!p.act&&(!U.la||p.area===U.la))).sort((a,b)=>a.name.localeCompare(b.name,'he'));
   if(!list.length)return h+'<p class="em">עוד אין מוצרים. הוסיפי את הראשון.</p>';
   const card=p=>U.edit===p.id?`<div class="card">${form()}</div>`:`<button class="pc" data-act="ep" data-id="${p.id}"><span class="nb">${nm(p)}${pa(p)}</span>${tg(p)}${p.fin?`<span class="tag">${p.rb?'קונה שוב':'לא קונה שוב'}</span>`:''}<em>עריכה</em></button>`;
   if(U.sort==='name')return h+list.map(card).join('');
@@ -272,11 +286,11 @@ function vOv(){
   const L=P[U.ph.wk]||[];
   return `<div class="ovl"><div class="sc" data-act="vc"></div><div class="pn"><img src="${L[U.ph.i]}" alt="תמונת עור"><div class="btns"><button class="pri" data-act="vc">סגירה</button><button class="dl" data-act="pdel">${U.arm==='ph'?'למחוק?':'מחיקה'}</button></div></div></div>`;
 }
-function render(){
+function render0(){
   document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===U.tab));
   $('#view').innerHTML={week:vWeek,month:vMonth,lib:vLib,shop:vShop}[U.tab]();
   $('#ov').innerHTML=U.ph?vOv():U.cmp?vCmp():'';
-  $('#pl').innerHTML=U.pl?`<div class="card"><h3>צבעים</h3><div class="sws">${PAL.map(([l,h,s],i)=>`<button class="sw${S.pal===i?' on':''}" data-act="pc" data-i="${i}"><i style="background:hsl(${h} ${s}% 52%)"></i><span>${l}</span></button>`).join('')}</div><h3 style="margin-top:22px">גיבוי</h3><p class="em">${S.bk?'גיבוי אחרון: '+S.bk:'עוד לא נעשה גיבוי'}. הוא כולל מוצרים, שגרות, יומן ותמונות.</p><div class="btns"><button class="pri" data-act="bkp">הורדת גיבוי</button><label class="pa">שחזור מקובץ<input type="file" id="rs" accept=".json,application/json" hidden></label></div><p class="em">שחזור מחליף את כל מה שקיים עכשיו.</p></div>`:'';
+  $('#pl').innerHTML=U.pl?`<div class="card"><h3>צבעים</h3><div class="sws">${PAL.map(([l,h,s],i)=>`<button class="sw${S.pal===i?' on':''}" data-act="pc" data-i="${i}"><i style="background:hsl(${h} ${s}% 52%)"></i><span>${l}</span></button>`).join('')}</div><h3 style="margin-top:22px">שפה</h3><div class="chs"><button class="ch${LANG()==='en'?' on':''}" data-act="lang" data-t="en">English</button><button class="ch${LANG()==='he'?' on':''}" data-act="lang" data-t="he">עברית</button></div><h3 style="margin-top:22px">גיבוי</h3><p class="em">${S.bk?'גיבוי אחרון: '+S.bk:'עוד לא נעשה גיבוי'}. הוא כולל מוצרים, שגרות, יומן ותמונות.</p><div class="btns"><button class="pri" data-act="bkp">הורדת גיבוי</button><label class="pa">שחזור מקובץ<input type="file" id="rs" accept=".json,application/json" hidden></label></div><p class="em">שחזור מחליף את כל מה שקיים עכשיו.</p></div>`:'';
 }
 const PAL=[['ורוד',335,80],['אפרסק',16,75],['מרווה',95,24],['כחול',210,50],['לילך',268,45],['חום',30,32],['יער',150,30],['בורדו',348,42]];
 function pal(i){const [,h,s]=PAL[i],d=matchMedia('(prefers-color-scheme: dark)').matches,r=document.documentElement.style,c=(x,y,z)=>`hsl(${x} ${y}% ${z}%)`;
@@ -291,21 +305,22 @@ async function out(name,blob){
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);
 }
 function shareImg(n){
-  const d=parse(U.sel),L=dayOf(U.sel)[n].filter(x=>prod(x.p)&&(!U.af||prod(x.p).area===U.af)).slice(0,12);
+  const en=LANG()==='en',d=parse(U.sel),L=dayOf(U.sel)[n].filter(x=>prod(x.p)&&(!U.af||prod(x.p).area===U.af)).slice(0,12);
   const cs=getComputedStyle(document.documentElement),g=(v,f)=>cs.getPropertyValue(v).trim()||f;
   const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;
-  const x=c.getContext('2d');x.direction='rtl';x.textAlign='right';
+  const x=c.getContext('2d'),X=v=>en?v:W-v;x.direction=en?'ltr':'rtl';x.textAlign=en?'left':'right';
   x.fillStyle=g('--bg','#f8f1f6');x.fillRect(0,0,W,H);
   const gr=x.createLinearGradient(0,0,W,620);gr.addColorStop(0,g('--pk','#f0509a'));gr.addColorStop(1,g('--lil','#f3d9fb'));
   x.fillStyle=gr;x.fillRect(0,0,W,620);
-  x.fillStyle='#fff';x.font='300 54px Heebo,sans-serif';x.fillText(DN[d.getDay()],W-90,230);
-  x.font='200 116px Heebo,sans-serif';x.fillText(d.getDate()+' ב'+MN[d.getMonth()],W-90,370);
-  x.font='400 62px Heebo,sans-serif';x.fillText((n==='am'?'שגרת בוקר':'שגרת ערב')+(U.af?' – '+U.af:''),W-90,510);
+  const ttl=(n==='am'?(en?'Morning routine':'שגרת בוקר'):(en?'Evening routine':'שגרת ערב'))+(U.af?' – '+(en?(EN[U.af]||U.af):U.af):'');
+  x.fillStyle='#fff';x.font='300 54px Heebo,sans-serif';x.fillText(DN[d.getDay()],X(90),230);
+  x.font='200 116px Heebo,sans-serif';x.fillText(en?MN[d.getMonth()]+' '+d.getDate():d.getDate()+' ב'+MN[d.getMonth()],X(90),370);
+  x.font='400 62px Heebo,sans-serif';x.fillText(ttl,X(90),510);
   const ink=g('--ink','#3b3340'),mu=g('--mu','#7f7587'),pk=g('--pk','#f0509a');let y=760;
   L.forEach(it=>{const p=prod(it.p);
-    x.fillStyle=pk;x.beginPath();x.arc(W-100,y-18,14,0,7);x.fill();
-    x.fillStyle=ink;x.font='400 56px Heebo,sans-serif';x.fillText(p.name,W-150,y);
-    if(p.brand){x.fillStyle=mu;x.font='300 38px Heebo,sans-serif';x.fillText(p.brand,W-150,y+52)}
+    x.fillStyle=pk;x.beginPath();x.arc(X(100),y-18,14,0,7);x.fill();
+    x.fillStyle=ink;x.font='400 56px Heebo,sans-serif';x.fillText(p.name,X(150),y);
+    if(p.brand){x.fillStyle=mu;x.font='300 38px Heebo,sans-serif';x.fillText(p.brand,X(150),y+52)}
     y+=p.brand?140:100});
   c.toBlob(b=>{if(b)out('routine-'+n+'-'+U.sel+'.png',b)},'image/png');
 }
@@ -313,9 +328,28 @@ document.addEventListener('change',e=>{
   if(e.target.id!=='rs')return;const f=e.target.files[0];if(!f)return;
   f.text().then(tx=>{try{const o=JSON.parse(tx);if(!o.S||!Array.isArray(o.S.products))throw 0;
     localStorage.setItem(K,JSON.stringify(o.S));localStorage.setItem(KP,JSON.stringify(o.P||{}));location.reload()}
-  catch(err){$('#tt').innerHTML='<div><span>הקובץ לא תקין</span></div>';setTimeout(()=>{$('#tt').innerHTML=''},4000)}});
+  catch(err){$('#tt').innerHTML='<div><span>הקובץ לא תקין</span></div>';tr($('#tt'));setTimeout(()=>{$('#tt').innerHTML=''},4000)}});
 });
-let tmr;function toast(m,s){U.un=s;$('#tt').innerHTML=`<div><span>${m}</span><button data-act="undo">ביטול</button></div>`;clearTimeout(tmr);tmr=setTimeout(()=>{$('#tt').innerHTML='';U.un=null},6000)}
+const EN={"שבוע": "Week", "חודש": "Month", "מוצרים": "Products", "קניות": "Shopping", "שגרת טיפוח": "Skincare Routine", "צבעים": "Colors", "החודש הקודם": "Previous month", "החודש הבא": "Next month", "השבוע הקודם": "Previous week", "השבוע הבא": "Next week", "היום": "Today", "ניקוי": "Cleanser", "טונר": "Toner", "סרום": "Serum", "קרם עיניים": "Eye cream", "קרם לחות": "Moisturizer", "קרם הגנה": "Sunscreen", "טיפול נקודתי": "Spot treatment", "מסכה": "Mask", "שמפו": "Shampoo", "מרכך": "Conditioner", "מסכת שיער": "Hair mask", "שמן שיער": "Hair oil", "קרם גוף": "Body lotion", "פילינג גוף": "Body scrub", "סבון גוף": "Body wash", "פנים": "Face", "גוף": "Body", "שיער": "Hair", "הכל": "All", "פעולות": "Actions", "ארכיון": "Archive", "פג תוקף": "Expired", "החזרה מהארכיון": "Restore from archive", "סיימתי, אקנה שוב": "Finished, will rebuy", "סיימתי, לא אקנה שוב": "Finished, won't rebuy", "קטגוריה חדשה": "New category", "הוספה": "Add", "שם המוצר": "Product name", "שם הפעולה": "Action name", "חברה": "Brand", "או תגית משלך": "Or your own tag", "פרטים נוספים": "More details", "תאריך התחלה": "Start date", "תאריך פתיחה": "Open date", "תוקף אחרי פתיחה (חודשים)": "Shelf life after opening (months)", "שמירה": "Save", "ביטול": "Cancel", "מחיקה": "Delete", "למחוק מכל הימים?": "Delete from all days?", "למחוק?": "Delete?", "באיזה חלק ביום": "Time of day", "בוקר": "Morning", "ערב": "Evening", "חזרה, מהיום הנבחר": "Repeat, from the selected day", "כל יום": "Every day", "ימים בשבוע": "Days of the week", "כל כמה ימים": "Every few days", "כל חודש": "Every month", "תאריך סיום (לא חובה)": "End date (optional)", "קטגוריות": "Categories", "תמונת עור": "Skin photo", "בחרי תמונה": "Pick a photo", "סגירה": "Close", "רשימת קניות": "Shopping list", "קניתי": "Bought", "הרשימה ריקה. מוצרים שסימנת \"אקנה שוב\" יופיעו כאן.": "The list is empty. Products you mark \"will rebuy\" appear here.", "להוסיף לרשימה": "Add to list", "רק היום": "Just today", "חוזר…": "Repeat…", "אין מוצרים להוספה כאן.": "No products to add here.", "+ מוצר חדש": "+ New product", "+ פעולה חדשה": "+ New action", "פעולה חדשה, למשל גילוח": "New action, e.g. shaving", "+ הוספת מוצר או פעולה": "+ Add product or action", "עוד לא נוספו מוצרים": "Nothing added yet", "סימון": "Mark done", "הסרה מהיום": "Remove from this day", "להסיר:": "Remove:", "מעכשיו והלאה": "From now on", "העור השבוע": "Skin this week", "השוואה": "Compare", "+ תמונה": "+ Photo", "אפשר להוסיף תמונה אחת או יותר לכל שבוע.": "Add one or more photos for each week.", "שיתוף כתמונה": "Share as image", "עוד לא נבחרה שגרה ליום הזה": "No routine set for this day yet", "ברוכה הבאה": "Welcome", "כדי להתחיל, הוסיפי את המוצרים שלך למאגר. אחר כך תבחרי מה לעשות בכל יום.": "To start, add your products to the library. Then choose what to do each day.", "הוספת מוצרים": "Add products", "העתקה מהיום הקודם": "Copy from previous day", "יומן עור": "Skin diary", "איך העור הרגיש היום? מה שמת?": "How did your skin feel today? What did you use?", "נקודה ימנית: בוקר": "Left dot: morning", "נקודה שמאלית: ערב": "Right dot: evening", "מלאה: הושלם": "Filled: done", "התגיות שלי": "My tags", "שינוי שם": "Rename", "תגית חדשה": "New tag", "המוצרים שלי": "My products", "מיון:": "Sort:", "א׳-ב׳": "A–Z", "קטגוריה": "Category", "סגירת תגיות": "Close tags", "ניהול תגיות": "Manage tags", "+ קטגוריה": "+ Category", "עוד אין מוצרים. הוסיפי את הראשון.": "No products yet. Add your first.", "קונה שוב": "Will rebuy", "לא קונה שוב": "Won't rebuy", "עריכה": "Edit", "ללא חברה": "No brand", "ללא קטגוריה": "No category", "גיבוי": "Backup", "הורדת גיבוי": "Download backup", "שחזור מקובץ": "Restore from file", "שחזור מחליף את כל מה שקיים עכשיו.": "Restoring replaces everything currently in the app.", "שפה": "Language", "עברית": "עברית", "ורוד": "Pink", "אפרסק": "Peach", "מרווה": "Sage", "כחול": "Blue", "לילך": "Lilac", "חום": "Brown", "יער": "Forest", "בורדו": "Burgundy", "הקובץ לא תקין": "Invalid file", "המוצר נמחק": "Product deleted", "הוסר": "Removed", "אין מספיק מקום לשמירה. אפשר למחוק תמונות ישנות.": "Not enough storage. You can delete old photos.", "לא הצלחתי לקרוא את התמונה.": "Couldn't read the photo.", "→": "←", "←": "→", "שגרת בוקר": "Morning routine", "שגרת ערב": "Evening routine", "הכל ": "All"};
+const RX=[[/^(\d+) מתוך (\d+) מוצרים סומנו$/,'$1 of $2 items done'],[/^יום (\d+)$/,'Day $1'],[/^נשארו (\d+) ימים$/,'$1 days left'],[/^נשארו (\d+) חודשים$/,'$1 months left'],[/^עוד לא נעשה גיבוי\. הוא כולל מוצרים, שגרות, יומן ותמונות\.$/,'No backup yet. It includes products, routines, diary and photos.'],[/^גיבוי אחרון: (.+?)\. הוא כולל מוצרים, שגרות, יומן ותמונות\.$/,'Last backup: $1. It includes products, routines, diary and photos.'],[/^שבוע (\d+\/\d+)$/,'Week $1'],[/^(\d+) ב(.+)$/,'$2 $1'],[/^(.*), היום$/,'$1, today']];
+const LANG=()=>S.lang||'en';
+const HEM=MN.slice(),HED=DN.slice(),HEW=WK.slice(),ENM=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],END=["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],ENW=['S','M','T','W','T','F','S'];
+function setLang(){const en=LANG()==='en';MN=en?ENM:HEM;DN=en?END:HED;WK=en?ENW:HEW;document.documentElement.lang=en?'en':'he';document.documentElement.dir=en?'ltr':'rtl';document.title=en?'Skincare Routine':'שגרת טיפוח'}
+function tr(root){
+  const en=LANG()==='en';
+  const f=s=>{if(Object.prototype.hasOwnProperty.call(EN,s))return EN[s];for(const [r,v] of RX)if(r.test(s))return s.replace(r,v);return null};
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode())L.push(n);
+  L.forEach(n=>{
+    if(!en){if(n.__he!==undefined){n.nodeValue=n.__he;n.__he=undefined}return}
+    const raw=n.nodeValue,s=raw.trim();if(!s||(n.parentNode.closest&&n.parentNode.closest('textarea,script,style')))return;
+    const r=f(s);if(r!==null){if(n.__he===undefined)n.__he=raw;n.nodeValue=raw.replace(s,()=>r)}});
+  root.querySelectorAll('[placeholder],[aria-label],[alt]').forEach(e=>['placeholder','aria-label','alt'].forEach(a=>{
+    const k='__he_'+a;
+    if(!en){if(e[k]!==undefined){e.setAttribute(a,e[k]);e[k]=undefined}return}
+    const v=e.getAttribute(a);if(v){const r=f(v);if(r!==null){if(e[k]===undefined)e[k]=v;e.setAttribute(a,r)}}}));
+}
+function render(){render0();tr(document.body)}
+let tmr;function toast(m,s){U.un=s;$('#tt').innerHTML=`<div><span>${m}</span><button data-act="undo">ביטול</button></div>`;tr($('#tt'));clearTimeout(tmr);tmr=setTimeout(()=>{$('#tt').innerHTML='';U.un=null},6000)}
 const shrink=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.72))};im.onerror=no;im.src=r.result};r.onerror=no;r.readAsDataURL(f)});
 
 document.addEventListener('click',e=>{
@@ -346,7 +380,7 @@ document.addEventListener('click',e=>{
   else if(a==='pick')U.pp={id};
   else if(a==='flt')U.flt=t;
   else if(a==='nw'||a==='nl'){U.edit='new';U.tgt=a==='nw'?n:null;U.dr={name:'',brand:'',tag:'',area:U.af||S.areas[0]||'',start:'',open:'',pao:''}}
-  else if(a==='ep'){const p=prod(id);U.edit=id;U.arm=null;U.dr={name:p.name,brand:p.brand||'',tag:p.tag||'',area:p.area||'',start:p.start||'',open:p.open||'',pao:p.pao||''}}
+  else if(a==='ep'){const p=prod(id);U.edit=id;U.arm=null;U.dr={name:p.name,brand:p.brand||'',tag:p.tag||'',area:p.area||'',start:p.start||'',open:p.open||'',pao:p.pao||'',act:p.act||0}}
   else if(a==='stag')U.dr.tag=U.dr.tag===t?'':t;
   else if(a==='fc'){U.edit=U.tgt=U.arm=null}
   else if(a==='sv'){
@@ -361,6 +395,10 @@ document.addEventListener('click',e=>{
   }
   else if(a==='copy'){const D=ensure(U.sel),Q=dayOf(addDays(U.sel,-1));['am','pm','tx'].forEach(s=>D[s]=Q[s].filter(x=>!x.r).map(x=>({p:x.p,d:false})))}
   else if(a==='srt')U.sort=t;
+  else if(a==='na'){U.edit='new';U.tgt=null;U.dr={name:'',brand:'',tag:'',area:(S.areas.includes(U.la)?U.la:S.areas[0])||'',start:'',open:'',pao:'',act:1}}
+  else if(a==='sug'){const np={id:'p'+Date.now().toString(36),name:t,brand:'',tag:'',area:U.af||S.areas[0]||'',start:'',open:'',pao:0,act:1};S.products.push(np);U.pp={id:np.id}}
+  else if(a==='acn'){const v=($('#ac').value||'').trim();if(v){const np={id:'p'+Date.now().toString(36),name:v,brand:'',tag:'',area:U.af||S.areas[0]||'',start:'',open:'',pao:0,act:1};S.products.push(np);U.pp={id:np.id}}}
+  else if(a==='lang'){S.lang=t;setLang()}
   else if(a==='img')shareImg(n);
   else if(a==='bkp'){S.bk=key(new Date());save();out('skincare-backup-'+S.bk+'.json',new Blob([JSON.stringify({v:1,S,P})],{type:'application/json'}))}
   else if(a==='aa')U.ar=!U.ar;
@@ -410,7 +448,7 @@ document.addEventListener('change',async e=>{
   }
   render();
 });
-render();
+setLang();render();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 </script>

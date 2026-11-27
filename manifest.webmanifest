@@ -1,8 +1,8 @@
 {
- "name": "שגרת טיפוח",
- "short_name": "שגרה",
- "lang": "he",
- "dir": "rtl",
+ "name": "Skincare Routine",
+ "short_name": "Routine",
+ "lang": "en",
+ "dir": "ltr",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
